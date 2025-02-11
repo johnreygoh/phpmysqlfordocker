@@ -1,9 +1,14 @@
 # version: '3.8'
+networks:
+  my_custom_network:
+    driver: bridge
 
 services:
   php:
     build: .
     container_name: php_app
+    networks:
+      - my_custom_network
     ports:
       - "8080:80"
     volumes:
@@ -12,14 +17,16 @@ services:
       - mysql
 
   mysql:
-    image: mysql:8.0
+    image: mariadb:10.4
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: userpass
+      MYSQL_ROOT_PASSWORD: 'rootpass'
+      MYSQL_DATABASE: 'mydatabase'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'userpass'
+    networks:
+      - my_custom_network
     ports:
       - "3306:3306"
     volumes:
